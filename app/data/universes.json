@@ -1,0 +1,57 @@
+[
+  {
+    "id": "stranger_things",
+    "name": "Stranger Things",
+    "rules": [
+      "horror sobrenatural pero con base 'física' inquietante",
+      "laboratorio encubre la verdad",
+      "los chicos son el corazón emocional",
+      "el Upside Down responde a lógica extraña pero consistente"
+    ],
+    "constraints": ["años 80", "pueblo chico", "tensión creciente", "final abierto"],
+    "setting": "Hawkins, Indiana",
+    "tone": "oscuro nostálgico",
+    "commonMotifs": ["luces parpadeantes", "radios", "pasillos de laboratorio", "bosque"]
+  },
+  {
+    "id": "breaking_bad",
+    "name": "Breaking Bad",
+    "rules": [
+      "todo tiene consecuencias",
+      "la tensión nace de decisiones pequeñas",
+      "lo moral se degrada lentamente",
+      "la violencia es realista, no heroica"
+    ],
+    "constraints": ["realismo", "sin magia", "causa-efecto", "final incómodo"],
+    "setting": "Albuquerque",
+    "tone": "thriller moral",
+    "commonMotifs": ["desierto", "neón", "silencios largos", "negociaciones"]
+  },
+  {
+    "id": "black_mirror",
+    "name": "Black Mirror",
+    "rules": [
+      "tecnología plausible a 5 minutos del presente",
+      "el giro revela el costo humano",
+      "final pesimista o irónicamente cruel"
+    ],
+    "constraints": ["sin fantasía", "comentario social", "un giro fuerte"],
+    "setting": "cualquier ciudad contemporánea",
+    "tone": "satírico oscuro",
+    "commonMotifs": ["pantallas", "términos de servicio", "vigilancia", "dopamina"]
+  },
+  {
+    "id": "westworld",
+    "name": "Westworld",
+    "rules": [
+      "la identidad es un bucle",
+      "la IA aprende por trauma",
+      "las corporaciones ocultan capas",
+      "la realidad se cuestiona"
+    ],
+    "constraints": ["filosófico pero con acción", "misterio", "revelaciones por capas"],
+    "setting": "parque/corporación",
+    "tone": "existencial",
+    "commonMotifs": ["loops", "pasillos blancos", "protocolos", "recuerdos implantados"]
+  }
+]
