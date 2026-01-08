@@ -1,21 +1,26 @@
 import { kv } from "@vercel/kv";
-import type { NextRequest } from "next/server";
 
 export const runtime = "nodejs";
 
-type RouteContext = {
-  params: Promise<{ id: string }>;
-};
+type Params = { id: string };
 
-export async function GET(_req: NextRequest, context: RouteContext) {
-  const { id } = await context.params;
+async function resolveParams(params: Params | Promise<Params>): Promise<Params> {
+  return (params && typeof (params as any).then === "function")
+    ? await (params as Promise<Params>)
+    : (params as Params);
+}
 
-  const key = `story:${id}`;
-  const data = await kv.get(key);
+export async function GET(
+  _req: Request,
+  ctx: { params: Params | Promise<Params> }
+) {
+  const { id } = await resolveParams(ctx.params);
 
-  if (!data) {
-    return new Response("Not found", { status: 404 });
+  const record = await kv.get<any>(`story:${id}`);
+
+  if (!record) {
+    return Response.json({ error: "not_found", id }, { status: 404 });
   }
 
-  return Response.json(data);
+  return Response.json(record);
 }
