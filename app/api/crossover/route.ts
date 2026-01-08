@@ -7,6 +7,13 @@ function makeId() {
   return crypto.randomBytes(8).toString("hex");
 }
 
+function getClientIp(req: Request) {
+  const xff = req.headers.get("x-forwarded-for");
+  if (xff) return xff.split(",")[0].trim();
+  return "unknown";
+}
+
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({} as any));
@@ -46,6 +53,39 @@ export async function POST(req: Request) {
       language,
       requestId: makeId(),
     };
+
+    if (!characterId || !universeId) {
+      return Response.json(
+        { error: "characterId and universeId are required" },
+        { status: 400 }
+      );
+    }
+
+    // -------- RATE LIMIT --------
+    const ip = getClientIp(req);
+    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const rlKey = `rl:${ip}:${today}`;
+
+    const count = await kv.incr(rlKey);
+
+    // primera vez → setear expiración (24h)
+    if (count === 1) {
+      await kv.expire(rlKey, 60 * 60 * 24);
+    }
+
+    if (count > 5) {
+      return Response.json(
+        {
+          error: "rate_limited",
+          message:
+            "Alcanzaste el límite diario de historias. Volvé a intentarlo mañana.",
+        },
+        { status: 429 }
+      ); 
+    }
+    // -------- END RATE LIMIT --------
+
+
 
     const res = await fetch(N8N_WEBHOOK_URL, {
       method: "POST",
