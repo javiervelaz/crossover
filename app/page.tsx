@@ -94,17 +94,52 @@ export default function Home() {
 
   return (
     <main style={{ maxWidth: 920, margin: "40px auto", padding: 16 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 800 }}>Crossover Engine</h1>
-      <p style={{ opacity: 0.8, marginTop: 6 }}>
-        Elegís personaje + universo + idioma, y n8n te genera un crossover consistente.
-      </p>
+      
+      <header
+        style={{
+          marginBottom: 40,
+          padding: "32px 28px",
+          borderRadius: 12,
+          background:
+            "linear-gradient(135deg, rgba(109,94,246,0.12), rgba(109,94,246,0.03))",
+          border: "1px solid rgba(109,94,246,0.25)",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: 38,
+            fontWeight: 900,
+            lineHeight: 1.2,
+            margin: 0,
+            color: "#111",
+          }}
+        >
+          ¿Qué pasaría si un personaje
+          <br />
+          entrara en otro universo?
+        </h1>
+
+        <p
+          style={{
+            marginTop: 14,
+            fontSize: 18,
+            opacity: 0.85,
+            maxWidth: 640,
+          }}
+        >
+          Un experimento creativo donde el carácter, las reglas del mundo y el tono
+          importan.  
+          Elegí el cruce. El resto lo escribe la historia.
+        </p>
+      </header>
+
 
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 12,
-          marginTop: 18,
+          padding: 24,
+          borderRadius: 12,
+          border: "1px solid #e5e5e5",
+          background: "#fafafa",
         }}
       >
         <label style={{ display: "grid", gap: 6 }}>
@@ -174,13 +209,30 @@ export default function Home() {
             disabled={loading}
             style={{
               width: "100%",
-              padding: "12px 14px",
+              padding: "14px 16px",
+              fontSize: 16,
               fontWeight: 800,
+              borderRadius: 8,
+              background: loading
+                ? "linear-gradient(135deg, #b8b3fa, #d6d4fd)"
+                : "linear-gradient(135deg, #6D5EF6, #8A7CFA)",
+              color: "#fff",
+              border: "none",
+              boxShadow: "0 6px 18px rgba(109,94,246,0.25)",
               cursor: loading ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              if (!loading) e.currentTarget.style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
             }}
           >
-            {loading ? "Generando..." : "Generar crossover"}
+            {loading ? "Abriendo un portal entre universos…" : "Generar historia"}
           </button>
+
+
         </div>
       </div>
 
@@ -191,55 +243,79 @@ export default function Home() {
       )}
 
       {result && (
-        <section style={{ marginTop: 22 }}>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-            <h2 style={{ fontSize: 22, fontWeight: 800, margin: 0 }}>{result.title}</h2>
+        <section
+            style={{
+              marginTop: 48,
+              paddingTop: 32,
+              borderTop: "2px solid rgba(109,94,246,0.25)",
+            }}
+          >
+          <h2 style={{ fontSize: 28, fontWeight: 900 }}>{result.title}</h2>
+
+          {result.tags?.length ? (
+            <p style={{ opacity: 0.6, marginTop: 6 }}>
+              {result.tags.join(" · ")}
+            </p>
+          ) : null}
+
+          <article
+            style={{
+              marginTop: 20,
+              fontSize: 17,
+              lineHeight: 1.75,
+              whiteSpace: "pre-wrap",
+              maxWidth: 720,
+            }}
+          >
+            {result.story}
+          </article>
+
+          <div style={{ marginTop: 20, display: "flex", gap: 12 }}>
             <a href={result.shareUrl} style={{ textDecoration: "underline" }}>
               Abrir link
             </a>
-            <button onClick={copyLink} style={{ padding: "8px 10px", fontWeight: 700 }}>
-              Copiar link
-            </button>
+            <button onClick={copyLink}>Copiar link</button>
           </div>
-
-          {result.tags?.length ? (
-            <p style={{ opacity: 0.75, marginTop: 8 }}>
-              Tags: {result.tags.join(", ")}
-            </p>
-          ) : null}
-
-          <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.65, marginTop: 12 }}>
-            {result.story}
-          </p>
-
-          {result.notes ? (
-            <p style={{ opacity: 0.75, marginTop: 12 }}>
-              <b>Notes:</b> {result.notes}
-            </p>
-          ) : null}
         </section>
+
       )}
 
-      <section style={{ marginTop: 28 }}>
-        <h3 style={{ fontSize: 18, fontWeight: 800 }}>Últimos crossovers</h3>
+      <section style={{ marginTop: 48 }}>
+        <h3 style={{ fontSize: 20, fontWeight: 800 }}>Últimos crossovers</h3>
 
-        {latest.length === 0 ? (
-          <p style={{ opacity: 0.7 }}>Todavía no hay historias guardadas.</p>
-        ) : (
-          <ul style={{ paddingLeft: 18, lineHeight: 1.6 }}>
-            {latest.map((r) => (
-              <li key={r.id}>
-                <a href={`/s/${r.id}`} style={{ textDecoration: "underline" }}>
-                  {r.output?.title ?? r.id}
-                </a>{" "}
-                <span style={{ opacity: 0.7 }}>
-                  — {r.input?.characterId} → {r.input?.universeId} · {r.input?.language ?? "en"}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <div style={{ display: "grid", gap: 12, marginTop: 16 }}>
+          {latest.map((r) => (
+            <a
+              key={r.id}
+              href={`/s/${r.id}`}
+              style={{
+                padding: 14,
+                border: "1px solid #ddd",
+                borderRadius: 8,
+                textDecoration: "none",
+                color: "inherit",
+                background: "#fff",
+                transition: "all 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#f7f7ff";
+                e.currentTarget.style.borderColor = "#6D5EF6";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.borderColor = "#ddd";
+              }}
+
+            >
+              <strong>{r.output?.title ?? r.id}</strong>
+              <div style={{ opacity: 0.7, fontSize: 14, marginTop: 4 }}>
+                {r.input?.characterId} → {r.input?.universeId} · {r.input?.language}
+              </div>
+            </a>
+          ))}
+        </div>
       </section>
+
 
     </main>
   );
