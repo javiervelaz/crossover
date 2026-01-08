@@ -1,12 +1,16 @@
 import { kv } from "@vercel/kv";
+import type { NextRequest } from "next/server";
 
 export const runtime = "nodejs";
 
-export async function GET(
-  _req: Request,
-  { params }: { params: { id: string } }
-) {
-  const key = `story:${params.id}`;
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
+
+export async function GET(_req: NextRequest, context: RouteContext) {
+  const { id } = await context.params;
+
+  const key = `story:${id}`;
   const data = await kv.get(key);
 
   if (!data) {
