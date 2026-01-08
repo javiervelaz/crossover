@@ -72,9 +72,13 @@ export default function Home() {
     }
    
     if (!res.ok) {
-      setError(JSON.stringify(data, null, 2));
-      setLoading(false);
-      return;
+      if (res.status === 429) {
+        setError("Llegaste al límite diario de historias. Volvé mañana 🙂");
+      } else {
+        setError(JSON.stringify(data, null, 2));
+        setLoading(false);
+        return;
+      }
     }
 
     setResult(data);
